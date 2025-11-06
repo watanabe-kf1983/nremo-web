@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nature Remo Web Controller</title>
+
+    <!-- Shoelace（UIコンポーネント） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css">
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "axios": "https://cdn.jsdelivr.net/npm/axios@1.13/+esm"
+        }
+    }
+    </script>
+    <style>
+        main {
+            max-width: 920px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .row {
+            display: grid;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .row.inline {
+            grid-auto-flow: column;
+            justify-content: start;
+            align-items: center;
+            gap: 8px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .spinner-container {
+            position: relative;
+            min-height: 100px;
+        }
+
+        sl-spinner {
+            display: none;
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            font-size: 3rem;
+        }
+
+        sl-spinner.loading {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Nature Remo Web Controller</h1>
+
+        <div class="row">
+            <span>
+                <a href="https://home.nature.global/" target="_blank" rel="noopener noreferrer">home.nature.global</a>で
+                Nature API Access token を作成し貼り付けてください。
+            </span>
+            <sl-input id="apiAccessToken" label="Nature API Access token" type="password" clearable
+                placeholder="home.nature.global で作成した Nature API Access token を貼り付けてください"></sl-input>
+
+            【警告】共有PCでの使用後は必ずクリアしてください（消さないとブラウザに残り、他人に家電を操作されてしまいます）
+            <span>照明とTV、ユーザ登録したボタンのみ対応。エアコン、床暖、などは未対応です。</span>
+
+        </div>
+        <div class="spinner-container">
+            <div class="row">
+                <sl-button id="scanBtn">家電をスキャン</sl-button>
+            </div>
+
+            <div id="userInfo" class="outputs">
+            </div>
+            <div id="appliancesList" class="outputs">
+            </div>
+
+            <sl-alert id="alert" variant="danger" closable>
+                <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
+                <strong>エラー</strong>
+                <div id="alertMsg"></div>
+            </sl-alert>
+
+            <sl-spinner id="spinner"></sl-spinner>
+        </div>
+
+    </main>
+
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>
