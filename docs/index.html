@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Nature Remo Web Controller</title>
 
-    <!-- Shoelace（UIコンポーネント） -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css">
     <script type="module"
         src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
@@ -38,10 +37,19 @@
             gap: 8px;
         }
 
-        pre {
-            white-space: pre-wrap;
-            word-break: break-word;
-            margin: 0;
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .github-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .github-link sl-icon {
+            font-size: 1.5rem;
         }
 
         .buttons-grid {
@@ -72,18 +80,23 @@
 
 <body>
     <main>
-        <h1>Nature Remo Web Controller</h1>
+        <div class="title-row">
+            <h1>Nature Remo Web Controller</h1>
+            <a href="https://github.com/watanabe-kf1983/nremo-web" target="_blank" rel="noopener noreferrer" class="github-link">
+                <sl-icon name="github" label="View on GitHub"></sl-icon>
+            </a>
+        </div>
 
         <div class="row">
             <span>
-                <a href="https://home.nature.global/" target="_blank" rel="noopener noreferrer">home.nature.global</a>で
-                Nature API Access token を作成し貼り付けてください。
+                <a href="https://home.nature.global/" target="_blank" rel="noopener noreferrer">home.nature.global</a>で作成した
+                Nature API Access token を貼り付けてください。ただし、<b>共有PC</b>で使用した後は必ずクリアしておいてください（ブラウザに残っていると、他人に家電を操作されてしまいます）。
             </span>
             <sl-input id="apiAccessToken" label="Nature API Access token" type="password" clearable
                 placeholder="home.nature.global で作成した Nature API Access token を貼り付けてください"></sl-input>
+            <span> 　</span>
 
-            【警告】共有PCでの使用後は必ずクリアしてください（消さないとブラウザに残り、他人に家電を操作されてしまいます）
-            <span>照明とTV、ユーザ登録したボタンのみ対応。エアコン、床暖、などは未対応です。</span>
+            <span>エアコン、床暖、などへの操作は未対応です。照明、TV、ユーザ登録したボタン操作のみ対応しています。</span>
 
         </div>
         <div class="spinner-container">
