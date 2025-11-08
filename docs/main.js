@@ -48,55 +48,37 @@ function showError(msg) {
 function hideError() {
     alertEl.hide();
 }
+function withSpinner(asyncFunc) {
+    return async () => {
 
+        setBusy(true);
+        hideError();
 
-// 名前をスキャン
+        try {
+            await asyncFunc();
+
+        } catch (e) {
+            console.error(e);
+            showError(e.message);
+
+        } finally {
+            setBusy(false);
+        }
+    }
+}
+
 async function scanUserInfo() {
-    hideError();
-    setBusy(true);
-
-    try {
+    const scan = async () => {
         const token = tokenEl.value.trim();
         const client = getClient(token);
         const nickname = await client.fetchMe();
         const appliances = await client.fetchAppliances();
         displayUserInfo(`${nickname}さん`, appliances);
         localStorage.setItem(LS_ACCESS_TOKEN, token);
-
-    } catch (e) {
-        console.error(e);
-        showError(e.message);
-
-    } finally {
-        setBusy(false);
     }
+    await withSpinner(scan)();
 }
 
-async function handleButtonPress(button) {
-    hideError();
-    setBusy(true);
-
-    try {
-        const client = getClient(tokenEl.value.trim());
-        const request = JSON.parse(button.dataset.request);
-        await client.execute(request);
-
-    } catch (e) {
-        console.error(e);
-        showError(e.message);
-    } finally {
-        setBusy(false);
-    }
-}
-
-
-function createButtonElement(button) {
-    const buttonEl = document.createElement("sl-button");
-    buttonEl.textContent = button.name;
-    buttonEl.dataset.request = JSON.stringify(button.request);
-    buttonEl.addEventListener("click", () => handleButtonPress(buttonEl));
-    return buttonEl;
-}
 
 function createApplianceCard(appliance) {
     const card = document.createElement("sl-card");
@@ -116,11 +98,17 @@ function createApplianceCard(appliance) {
     return card;
 }
 
+function createButtonElement(button) {
+    const buttonEl = document.createElement("sl-button");
+    buttonEl.textContent = button.name;
+    buttonEl.addEventListener("click", withSpinner(button.push));
+    return buttonEl;
+}
+
 function displayUserInfo(userName, appliances) {
     userInfoEl.textContent = userName;
-    appliancesEl.innerHTML = ""; 
+    appliancesEl.innerHTML = "";
     appliances.forEach(appliance => {
         appliancesEl.appendChild(createApplianceCard(appliance));
     });
 }
-
